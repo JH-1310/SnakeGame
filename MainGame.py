@@ -1,3 +1,6 @@
+# import files
+import Score
+
 # libraries
 import pygame
 import time
