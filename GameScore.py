@@ -17,4 +17,4 @@ def show_score(choice, color, font, size):
     score_rect = score_surface.get_rect()
 
     # display text
-    MainGame.game_window.blit(score_surface, score_rect)
+    MainGame.window_display.blit(score_surface, score_rect)

@@ -1,5 +1,5 @@
 import MainGame
-import Score
+import GameScore
 import pygame
 import time
 
@@ -9,7 +9,7 @@ def game_over():
     my_font = pygame.font.SysFont("calibri", 50)
 
     # create text surface
-    game_over_surface = my_font.render("Your score is : " + str(Score.score), True, MainGame.red)
+    game_over_surface = my_font.render("Your score is : " + str(GameScore.score), True, MainGame.red)
 
     # create a rectangular object for the next surface object
     game_over_rect = game_over_surface.get_rect()
