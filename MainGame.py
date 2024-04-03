@@ -1,5 +1,6 @@
 # import files
-import Score
+import GameScore
+import GameOver
 
 # libraries
 import pygame
@@ -44,3 +45,80 @@ munch_spawn = True
 # default snake direction
 direction = 'RIGHT'
 change_to = direction
+
+########################################################################
+
+# main function
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                change_to = "UP"
+            if event.key == pygame.K_DOWN:
+                change_to = "DOWN"
+            if event.key == pygame.K_RIGHT:
+                change_to = "RIGHT"
+            if event.key == pygame.K_LEFT:
+                change_to = "LEFT"
+
+    # if two keys are pressed then it won't bug out
+    if change_to == 'UP' and direction != 'DOWN':
+        direction = 'UP'
+    if change_to == 'DOWN' and direction != 'UP':
+        direction = 'DOWN'
+    if change_to == 'LEFT' and direction != 'RIGHT':
+        direction = 'LEFT'
+    if change_to == 'RIGHT' and direction != 'LEFT':
+        direction = 'RIGHT'
+    
+    # move the snake
+    if direction == 'UP':
+        snake_position[1] -= 10
+    if direction == 'DOWN':
+        snake_position[1] += 10
+    if direction == 'LEFT':
+        snake_position[0] -= 10
+    if direction == 'RIGHT':
+        snake_position[0] += 10
+
+    # snake growing and incremental score
+    snake_body.insert(0, list(snake_position))
+    if snake_position[0] == munch_position[0] and snake_position[1] == munch_position[1]:
+        GameScore.score += 1
+        munch_spawn = False
+    else:
+        snake_body.pop()
+         
+    if not munch_spawn:
+        fruit_position = [random.randrange(1, (window_x//10)) * 10, 
+                          random.randrange(1, (window_y//10)) * 10]
+         
+    munch_spawn = True
+    window_display.fill(black)
+     
+    for pos in snake_body:
+        pygame.draw.rect(window_display, green, pygame.Rect(
+          pos[0], pos[1], 10, 10))
+         
+    pygame.draw.rect(window_display, white, pygame.Rect(
+      munch_position[0], munch_position[1], 10, 10))
+    
+    # game over
+    if snake_position[0] < 0 or snake_position[0] > window_x-10:
+        GameOver.game_over()
+    if snake_position[1] < 0 or snake_position[1] > window_y-10:
+        GameOver.game_over()
+
+    # snake body contact into game over
+    for block in snake_body[1:]:
+        if snake_position[0] == block[0] and snake_position[1] == block[1]:
+            GameOver.game_over()
+    
+    # displaying score continuously
+    GameScore.show_score(1, white, "calibri", 20)
+     
+    # Refresh game screen
+    pygame.display.update()
+ 
+    # Frame Per Second /Refresh Rate
+    fps.tick(movement_speed)
